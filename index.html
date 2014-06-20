@@ -1,0 +1,199 @@
+<html>
+<head>
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+
+<h1>Simple model classes</h1>
+
+</br>
+
+<p>
+Create a new Playground on Xcode to demonstrate the code, go to <em>File\New\File</em> then chose <em>Playground</em> under <em>iOS\Source</em>, name it <em>MyPlayground</em> and then save it on your Desktop.
+If all went well, you will be able to see the Playground interface.
+</p>
+
+</br>
+<img src="img/01.png" alt="Swift Playground"></img>
+</br>
+
+<p>
+On this new project, you're going to create a <i>Class</i> to describe a <i>Bug</i> with a few fields to describe it. 
+So, lets first create the new Class on your <i>Playground</i>:
+</p>
+
+<pre lang="objc">
+class ScaryBugData {
+  
+}
+</pre>
+
+<p>
+Check that you have named the class <i>ScaryBugData</i> and everything inside the <code>{}</code> is related to that specific class.
+You can easily use this class right after declaring it:
+</p>
+
+<pre lang="objc">
+class ScaryBugData {
+  
+}
+
+let bug = ScaryBugData()
+</pre>
+
+<p>
+Perfect, right now you have a new constant called <code>bug</code>, you've used the keyword <code>let</code> to declare it because the <i>reference</i> to this value will not change during code execution.
+Remember that on <i>Swift</i> you can declare values using <code>let</code> or <code>var</code>, the difference between them is that with <i><code>let</code></i> you are creating a constant and with <code>var</code> a variable that can change on runtime.
+</p>
+
+<p>
+Ok, so now you have to declare some <i>instance variables</i> for this class to describe what information the <code>ScaryBugData</code> will hold.
+To do this, first change the class declaration with the following code:
+</p>
+
+<pre lang="objc">
+class ScaryBugData {
+  let title:String
+  let rating:Float
+}
+</pre>
+
+<p>
+Cool, nothing special here. Your <code>ScaryBugData</code> now has a <code>String</code> <i>title</i> to name it and a <code>Float</code> <i>rating</i> value to represent how scary the bug is.
+</p>
+
+<p>
+But, if you pay close attention to your Playground you will see that there are some compile errors:
+</p>
+
+<img src="img/02.png" alt="Compile erros while declaring attributes for ScaryBugData"></img>
+
+<p>
+What is happening here? And specially, why? 
+
+You declared that the bug has those two attributes but you have never <i>initialized</i> them, thus you have the following two options, either give a <i>default</i> value for the name and the rating, or declare a <i>constructor</i> to pass the values on object creation time.
+</p>
+
+<p>
+The <i>constructor</i> approach makes more sense right now because you are going to name the bug right when you create it. Now you should change the <code>ScaryBugData</code> adding the <i>constructor</i> to receive the values right when the object is created.
+</p>
+
+<pre lang="objc">
+class ScaryBugData {
+  let title:String
+  let rating:Float
+  
+  init(title:String, rating:Float) {
+      self.title = title
+      self.rating = rating
+  }
+}
+</pre>
+
+<p>
+Now, if you want to create a new <code>ScaryBugData</code> object you <i>have<i> to use the <i>constructor</i> that you have declared, because it only makes sense to have a bug object after naming it and determining how scary it really is.
+</p>
+
+<pre lang="objc">
+class ScaryBugData {
+  let title:String
+  let rating:Float
+  
+  init(title:String, rating:Float) {
+      self.title = title
+      self.rating = rating
+  }
+}
+
+let smallBug = ScaryBugData(title: "Wrong color", rating: 2)
+let missingField = ScaryBugData(title: "Missing phone field for contact", rating: 6)
+let appCrashing = ScaryBugData(title: "Not working properly", rating: 10)
+</pre>
+
+<p>
+Really cool, right? Now your object declares the world more how it really is! It doesn't make sense to create a bug on the system without describing and rating it. 
+</p>
+
+<p>
+Ok, now you are going to add some extra information about the bug, change the class declaration to match the following code:
+</p>
+
+<pre lang="objc">
+class ScaryBugData {
+  let title:String
+  let rating:Float
+  var occurrence:NSDate = NSDate()
+  var image:UIImage?
+  
+  init(title:String, rating:Float) {
+      self.title = title
+      self.rating = rating
+  }
+}
+</pre>
+
+<p>
+What you did there? First you have added an <b>occurrence</b> property to state when did the bug initially appear and you also gave a default value to it, saying that the bug appeared when the object was created, but more importantly, you declared the property using <code>var</code> keyword: it means that the occurence of the object can change after the bug is instanciated, so you can say exactly when did the bug ocurr.
+</p>
+
+<p>
+You also added a property to hold the bug's screenshot, but you should check that there is a new keyword after the declaration, the <code>?</code> means that this variable <i>might not have a value set to it</i>, and this matches exactly our needs, because the <code>ScaryBugData</code> doesn't really need an image to explain itself, but it sure would be nice to have one.
+</p>
+
+<pre lang="objc">
+class ScaryBugData {
+  let title:String
+  let rating:Float
+  var occurrence:NSDate = NSDate()
+  var image:UIImage?
+  
+  init(title:String, rating:Float) {
+      self.title = title
+      self.rating = rating
+  }
+}
+
+let bug = ScaryBugData(title: "Bug", rating: 5)
+
+//declares a constant to hold a value from yesterday and set it on the bug object
+let yesterday = NSDate(timeIntervalSinceNow: -(60.0*60.0*24.0))
+bug.occurrence = yesterday
+
+//loads the image and also set it on the bug object
+let image = UIImage(named: "bug-image")
+bug.image = image
+</pre>
+
+<p>
+The only special thing that you need to take care when using the bug's image is to know if there is a value or there is not a value assigned to the property, with the special <code>?</code> keyword you can also ask the property if it does hold an image and <i>if and only if the image has a value, use it.</i>.
+</p>
+
+<pre lang="objc">
+let bug = ScaryBugData(title: "Bug", rating: 5)
+
+let yesterday = NSDate(timeIntervalSinceNow: -(60.0*60.0*24.0))
+bug.occurrence = yesterday
+
+let image:UIImage = UIImage(named: "bug-image")
+bug.image = image
+
+if(bug.image?){
+    let bugImage = bug.image! // you could assign that image to an interface object for example
+    println("bug has a image")
+} else {
+    println("bug only has a title to describe it")
+}
+</pre>
+
+<p>
+Check that with the <code>?</code> keyword added to the property declaration, you can <i>ask</i> if there is a value assigned to it, and to access the information that the property holds you need to use the <code>!</code> keyword.
+</p>
+
+<p>
+And that is it! Your <code>ScaryBugData</code> is done and ready to be used. If you have a real project, the best way to use this class is to create a separate file to hold the declaration, and you are good to go \o/
+</p>
+</div>
+</body>
+</html>
